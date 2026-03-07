@@ -1,1 +1,31 @@
+# Binaire compilé
+/token-price-watcher
+*.exe
+*.out
+*.test
+
+# Dossier build ou dist
+/build/
+/dist/
+
+# Modules Go
+/vendor/
+go.sum
+go.mod~
+
+# Config perso
 .env
+.env.*
+
+# Fichiers temporaires
+*.log
+*.tmp
+*.swp
+
+# VSCode
+.vscode/
+
+# Mac / Linux
+.DS_Store
+*.~*
+
