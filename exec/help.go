@@ -15,6 +15,7 @@ func PrintHelp() {
   -lower <prix>          → Alerte si prix <= lower (0 désactive)
   -signal-ingest         → Active l'ingestion de signaux Telegram (getUpdates)
   -signal-chat-ids       → Chats/channels source CSV (sinon TELEGRAM_SOURCE_CHAT_IDS)
+  -signal-public-channel → Handle/URL Telegram public pour lire les posts sans bot
   -signal-poll-every     → Polling signaux Telegram (défaut: 30m)
   -signal-offset-file    → Fichier offset signaux (sinon env/default)
   -once                  → Envoie une seule notification puis quitte
@@ -25,5 +26,6 @@ func PrintHelp() {
   go run ./cmd -token avalanche-2 -price-provider coingecko -freq 12h -notify-every 24h -cooldown 6h -upper 18 -lower 12
   go run ./cmd -token AVAXUSDT -price-provider binance -once
   go run ./cmd -token avalanche-2 -signal-ingest -signal-chat-ids "-100123,-100456" -signal-poll-every 15m
+  go run ./cmd -signal-public-channel https://t.me/s/tofan_trade
 `)
 }

@@ -25,6 +25,7 @@ func main() {
 	cooldown := flag.String("cooldown", "6h", "Cooldown entre alertes de seuil (ex: 30m, 6h)")
 	signalIngest := flag.Bool("signal-ingest", false, "Ingestion de signaux depuis Telegram getUpdates")
 	signalChatIDs := flag.String("signal-chat-ids", "", "IDs de chats/channels source séparés par virgule (sinon TELEGRAM_SOURCE_CHAT_IDS)")
+	signalPublicChannel := flag.String("signal-public-channel", "", "Handle ou URL Telegram publique (ex: tofan_trade ou https://t.me/s/tofan_trade)")
 	signalPollEvery := flag.String("signal-poll-every", "30m", "Fréquence de polling des signaux Telegram")
 	signalOffsetFile := flag.String("signal-offset-file", "", "Fichier offset Telegram (sinon TELEGRAM_SIGNAL_OFFSET_FILE ou data/telegram_signal_offset.txt)")
 	once := flag.Bool("once", false, "Envoie une notification unique puis quitte")
@@ -37,6 +38,24 @@ func main() {
 
 	if *searchQuery != "" {
 		ex.SearchTokenID(*searchQuery)
+		return
+	}
+
+	if strings.TrimSpace(*signalPublicChannel) != "" {
+		posts, err := ex.FetchTelegramPublicPosts(*signalPublicChannel)
+		if err != nil {
+			fmt.Printf("❌ Public Telegram fetch failed: %v\n", err)
+			return
+		}
+
+		post, signal, ok := ex.LatestParsedSignalFromPosts(posts)
+		if !ok {
+			fmt.Printf("ℹ️ No actionable signal found in recent posts for %s\n", *signalPublicChannel)
+			return
+		}
+
+		fmt.Println(ex.FormatSignalNotification(post.Channel, signal))
+		fmt.Printf("🔗 Source: %s\n", post.URL)
 		return
 	}
 

@@ -20,6 +20,7 @@ This version is intentionally notification-only:
 - One-shot notification mode (`-once`).
 - Telegram signal ingestion:
   - read channel/chat posts via Bot API `getUpdates`
+  - read public channel previews via `https://t.me/s/<channel>`
   - parse signal-like messages (`BUY/SELL/CLOSE/CANCEL`)
   - forward parsed signals as Telegram notifications
 
@@ -28,7 +29,11 @@ This version is intentionally notification-only:
 ```bash
 go mod download
 ```
-2. Create `.env`:
+2. Copy the example env file and fill in your values:
+```bash
+cp .env.example .env
+```
+3. Update `.env`:
 ```env
 TELEGRAM_BOT_TOKEN=your_bot_token
 TELEGRAM_CHAT_ID=your_chat_id
@@ -95,6 +100,11 @@ go run ./cmd \
 Override source channels from CLI:
 ```bash
 go run ./cmd -signal-ingest -signal-chat-ids "-1001234567890,-1002222222222"
+```
+
+Read latest parsed signal from a public Telegram channel:
+```bash
+go run ./cmd -signal-public-channel https://t.me/s/tofan_trade
 ```
 
 ## Validation
